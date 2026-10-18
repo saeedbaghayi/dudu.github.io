@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF5E8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/v4/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/v4/apple-touch-icon.png">
+<title>DuDu · Choisis ton livre</title>
+<script>try{var s=JSON.parse(localStorage.getItem('dudu-a1-u1')||'{}');if(s.theme)document.documentElement.setAttribute('data-theme',s.theme);}catch(e){}</script>
+<link rel="stylesheet" href="troupe.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap">
+<style>
+  .bk-wrap{max-width:720px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+  .bk-head{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
+  .bk-brand{font:800 15px/1 var(--t-font-d);letter-spacing:.06em;text-transform:uppercase;color:var(--t-teal-ink)}
+  .bk-title{font:800 clamp(30px,7vw,42px)/1.05 var(--t-font-d);margin:0;color:var(--t-ink)}
+  .bk-sub{margin:0;color:var(--t-ink-2);font:600 16px/1.5 var(--t-font-b)}
+  .bk-sub .fa{font-family:Vazirmatn,Tahoma,sans-serif;direction:rtl;display:block}
+  .bk-list{display:grid;gap:18px}
+  .bk-card{display:block;text-decoration:none;color:inherit;overflow:hidden;padding:0}
+  .bk-art{display:block;line-height:0;border-bottom:3px solid var(--t-line)}
+  .bk-art svg{width:100%;height:auto;display:block}
+  .bk-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px}
+  .bk-name{font:800 24px/1.15 var(--t-font-d);margin:0;color:var(--t-ink)}
+  .bk-meta{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+  .bk-units{margin:0;padding:0;list-style:none;color:var(--t-ink-2);font:600 15px/1.5 var(--t-font-b)}
+  .bk-go{align-self:flex-start;margin-top:6px}
+  .bk-foot{margin-top:28px;color:var(--t-ink-2);font:600 13.5px/1.5 var(--t-font-b);text-align:center}
+</style>
+</head>
+<body class="t-page">
+<main class="bk-wrap">
+  <header class="bk-head">
+    <span class="bk-brand">DuDu</span>
+    <h1 class="bk-title">Choisis ton livre</h1>
+    <p class="bk-sub">Chaque livre garde sa progression. FR · EN · FA, lecture de 0,5× à 1,25×.<span class="fa">کتابت را انتخاب کن — پیشرفت هر کتاب جدا ذخیره می‌شود.</span></p>
+  </header>
+  <div class="bk-list" id="list"></div>
+  <p class="bk-foot">Pour changer de livre plus tard : menu <b>Moi</b> → <b>Changer de livre</b>.</p>
+</main>
+<script src="places.js"></script>
+<script>
+var BOOKS = [{"slug":"francais-a1","name":"Français A1 · premiers pas","title":"Français A1 · premiers pas","subtitle":"","units":[{"n":1,"titre":"Bonjour ! Je me présente"},{"n":2,"titre":"Ma famille"},{"n":3,"titre":"À la boulangerie"},{"n":4,"titre":"En ville"}],"key":"dudu-a1-u1"},{"slug":"edito-a1","name":"Édito A1","title":"Édito A1","subtitle":"Méthode de français · Didier","units":[{"n":1,"titre":"Et vous ?"},{"n":2,"titre":"On va où ?"},{"n":3,"titre":"Qu'est-ce qu'on mange ?"}],"key":"dudu-a1-u1@edito-a1"},{"slug":"ielts14-t1","name":"Cambridge IELTS 14 · Test 1","title":"Cambridge IELTS 14 · Test 1","subtitle":"Academic · English","units":[{"n":1,"titre":"Listening · 40 questions"},{"n":2,"titre":"Reading · 3 passages"},{"n":3,"titre":"Writing · Task 1 & 2 + AI feedback"},{"n":4,"titre":"Speaking · Parts 1–3 + AI examiner"},{"n":5,"titre":"Words · 44 flashcards"}],"key":"dudu-ielts14-t1","standalone":true}];
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function done(key){try{var s=JSON.parse(localStorage.getItem(key)||'{}');return Object.keys(s).filter(function(k){return k.indexOf('ex_')===0&&s[k]&&s[k].tot>0;}).length;}catch(e){return 0;}}
+var last=null; try{last=localStorage.getItem('dudu-lastbook');}catch(e){}
+var dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+document.getElementById('list').innerHTML = BOOKS.map(function(b,i){
+  var n=done(b.key), art='';
+  if(b.standalone){art='<svg viewBox="0 0 360 120" role="img" aria-label="'+esc(b.title)+'"><rect width="360" height="120" fill="'+(dark?'#1D3D3C':'#D4EFEA')+'"/>'+
+    '<g fill="none" stroke="'+(dark?'#7FE0D6':'#0E5754')+'" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M40 70v-8a24 24 0 0148 0v8M40 70h9v22h-6a3 3 0 01-3-3zM88 70h-9v22h6a3 3 0 003-3z"/></g>'+
+    '<text x="112" y="72" font-family="Bricolage Grotesque,system-ui,sans-serif" font-size="46" font-weight="800" fill="'+(dark?'#F5ECE0':'#2B2230')+'">IELTS</text>'+
+    '<text x="114" y="98" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="'+(dark?'#B7A9BA':'#675A6B')+'">Listening · Reading · Writing · Speaking</text></svg>';}
+  else try{art=window.Places?Places.svg(Math.min(i+1,5),{variant:'banner',dark:dark,title:b.title}):'';}catch(e){}
+  return '<a class="t-card t-card--tap bk-card" href="'+esc(b.slug)+'/" data-slug="'+esc(b.slug)+'">'+
+    '<span class="bk-art">'+art+'</span>'+
+    '<span class="bk-body"><h2 class="bk-name">'+esc(b.title)+'</h2>'+
+    '<span class="bk-meta">'+(b.subtitle?'<span class="t-pill">'+esc(b.subtitle)+'</span>':'')+
+      '<span class="t-pill t-pill--teal">'+b.units.length+' unité'+(b.units.length>1?'s':'')+'</span>'+
+      (n?'<span class="t-pill t-pill--mustard">'+n+' exercice'+(n>1?'s':'')+' faits</span>':'')+
+      (b.slug===last?'<span class="t-pill t-pill--tomato">dernier ouvert</span>':'')+'</span>'+
+    '<ul class="bk-units">'+b.units.map(function(u){return '<li>Unité '+u.n+' · '+esc(u.titre)+'</li>';}).join('')+'</ul>'+
+    '<span class="t-btn t-btn--teal t-btn--sm bk-go">'+(n?'Continuer':'Commencer')+' →</span></span></a>';
+}).join('');
+document.getElementById('list').addEventListener('click',function(e){var a=e.target.closest('[data-slug]');if(a)try{localStorage.setItem('dudu-lastbook',a.dataset.slug);}catch(er){}});
+if('serviceWorker' in navigator)try{navigator.serviceWorker.register('/sw.js').catch(function(){});}catch(e){}
+</script>
+</body>
+</html>

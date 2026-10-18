@@ -1,0 +1,13 @@
+{
+  "title": "Cambridge IELTS 14 · Test 1",
+  "subtitle": "Academic · English",
+  "lang": "en",
+  "key": "dudu-ielts14-t1",
+  "units": [
+    { "n": 1, "titre": "Listening · 40 questions" },
+    { "n": 2, "titre": "Reading · 3 passages" },
+    { "n": 3, "titre": "Writing · Task 1 & 2 + AI feedback" },
+    { "n": 4, "titre": "Speaking · Parts 1–3 + AI examiner" },
+    { "n": 5, "titre": "Words · 44 flashcards" }
+  ]
+}
